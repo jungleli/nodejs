@@ -1,0 +1,115 @@
+<% include header.html %>
+<h1><%= title %></h1>
+<div>
+
+<table class='table' id="table_testcase" data-toggle='table' data-url="http://localhost:3000/testcase/queryAll" data-height="299" data-sort-name="ID" data-sort-order="asc" >
+<thead>
+<tr>
+<th data-field="ID">ID</th>
+<th data-field='NAME'>CaseName</th>
+<th data-field="Caption">Caption</th>
+<th data-field='date_created'>date</th>
+<th data-field="Description">Desc</th>
+<th data-field='is_nagetive'>is_nagetive</th>
+</tr>
+</thead>
+</table>
+</div>
+
+
+<table class="table table-bordered" id="table-javascript">
+  <thead>
+   <tr> <th>Test Result </th></tr>
+    <tr>
+    	<th data-field="ID">ID</th>
+        <th data-field="NAME">NAME</th>
+        <th data-field="Caption">Caption</th>
+        <th data-field="Result">Result</th>
+        <th data-field="Description">Description</th>
+        <th data-field="is_nagetive">is_nagetive</th>
+        <th data-field='date_created'>date</th>
+    </tr>
+    </thead>
+</table>
+
+<script>
+$('#table-javascript').bootstrapTable({
+    url: '../testcase/queryResult',
+  /*  columns: [{
+        field: 'ID',
+        title: 'ID'
+    }, {
+        field: 'NAME',
+        title: 'Case Name'
+    }, {
+        field: 'Result',
+        title: 'testResult'
+    }]*/
+});
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+/*
+$(document).ready(function(){
+	var id = 0;
+	$.ajax({
+		url:'./queryAll',
+		type:'get',
+		contentType: "application/json",
+		dataType:'json',
+		success:function(data){
+			//console.log(data);
+			console.dir(data);
+			var $table = $('#table_testcase');
+			$table.dataTable(data);
+		},
+		error:function(data){
+			alert('failure!');
+			console.log(data.message);
+		}
+	});
+});
+*/
+
+
+</script>
+
+<script>
+/*$(document).ready(function(){
+var id = 0;
+$.ajax({
+	url:'../testcase/queryAll',
+	type:'get',
+	contentType: "application/json",
+	dataType:'json',
+	success:function(data){
+		console.log(data);
+		var str='';
+		$.each(data,function(i,val){
+			str+='<ul><li>'+val.NAME+'</li></ul>';
+		});
+					
+		$("#data").html(str);						
+
+	},
+	error:function(data){
+		alert('failure!');
+		console.log(data.message);
+	}
+});
+});
+*/
+</script>
+<% include footer.html %>
