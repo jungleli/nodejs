@@ -1,8 +1,8 @@
 <% include header.html %>
-<h1><%= title %></h1>
-<div>
 
-<table class='table' id="table_testcase" data-toggle='table' data-url="http://localhost:3000/testcase/queryAll" data-height="299" data-sort-name="ID" data-sort-order="asc" >
+<h1><%= title %></h1>
+<div class='t1'>
+<table class='table table-hover'  id="table-testcase"   data-toggle='table' data-url='../testcase/queryAll'  data-row-style="rowStyle" data-sort-name="ID" data-sort-order="asc" >
 <thead>
 <tr>
 <th data-field="ID">ID</th>
@@ -15,38 +15,60 @@
 </thead>
 </table>
 </div>
-
-
-<table class="table table-bordered" id="table-javascript">
+<div class="table-responsive" style="width:1000px;margin: 30px 0 30px 4px;">
+<table class="table table-striped " id="table-testresult">
   <thead>
-   <tr> <th>Test Result </th></tr>
     <tr>
     	<th data-field="ID">ID</th>
         <th data-field="NAME">NAME</th>
         <th data-field="Caption">Caption</th>
         <th data-field="Result">Result</th>
-        <th data-field="Description">Description</th>
-        <th data-field="is_nagetive">is_nagetive</th>
         <th data-field='date_created'>date</th>
     </tr>
     </thead>
 </table>
-
+</div>
+<div class="t1">
+<table class="table table-bordered" id="table-test">
+<caption style="text-align:center;font-weight: bold;font-size: larger">Test Result</caption>
+  <thead>
+    <tr>
+    	<th data-field="ID">ID</th>
+        <th data-field="NAME">NAME</th>
+        <th data-field="Caption">Caption</th>
+        <th data-field="Result">Result</th>
+        <th data-field="is_nagetive">is_nagetive</th>
+        <th data-field="Description">Desc</th>
+    </tr>
+    </thead>
+</table>
+</div>
 <script>
-$('#table-javascript').bootstrapTable({
+
+
+$('#table-testresult').bootstrapTable({
     url: '../testcase/queryResult',
-  /*  columns: [{
-        field: 'ID',
-        title: 'ID'
-    }, {
-        field: 'NAME',
-        title: 'Case Name'
-    }, {
-        field: 'Result',
-        title: 'testResult'
-    }]*/
 });
 
+$(document).ready(function(){
+	setInterval("reload()",5000);
+});
+
+function reload(){
+	$("#table-testcase").bootstrapTable('refresh');
+	$('#table-testresult').bootstrapTable('refresh');
+}
+$.ajax({
+		url:'../testcase/queryResult',
+		type:'get',
+		contentType: "application/json",
+		dataType:'json',
+		success:function(data){
+			//console.log(data);
+			console.dir(data);
+			$('#table-test').bootstrapTable({data:data});
+		}
+});
 </script>
 
 
