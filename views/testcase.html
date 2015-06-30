@@ -2,9 +2,19 @@
 
 <h1><%= title %></h1>
 <div class='t1'>
-<table class='table table-hover'  id="table-testcase"   data-toggle='table' data-url='../testcase/queryAll'  data-row-style="rowStyle" data-sort-name="ID" data-sort-order="asc" >
+<table     class='table'  
+           id="table-testcase"   
+		   data-toggle='table' 
+           data-url='../testcase/queryAll'
+           data-pagination="true"
+           data-page-size="5"
+           data-page-list="[5,8,10]"
+           data-pagination-first-text="First"
+           data-pagination-pre-text="Previous"
+           data-pagination-next-text="Next"
+           data-pagination-last-text="Last">
 <thead>
-<tr>
+<tr  class="success">
 <th data-field="ID">ID</th>
 <th data-field='NAME'>CaseName</th>
 <th data-field="Caption">Caption</th>
@@ -15,11 +25,11 @@
 </thead>
 </table>
 </div>
-<div class="table-responsive" style="width:1000px;margin: 30px 0 30px 4px;">
+<div class="table-responsive t1" >
 <table class="table table-striped " id="table-testresult">
   <thead>
-    <tr>
-    	<th data-field="ID">ID</th>
+    <tr class="info">
+    	<th data-field="ID"><i class="glyphicon glyphicon-star"></i>ID</th>
         <th data-field="NAME">NAME</th>
         <th data-field="Caption">Caption</th>
         <th data-field="Result">Result</th>
@@ -29,12 +39,21 @@
 </table>
 </div>
 <div class="t1">
-<table class="table table-bordered" id="table-test">
+<table     class='table'  
+           id="table-test"   
+           data-pagination="true"
+           data-page-size="5"
+           data-page-list="[5,8,10]"
+           data-pagination-first-text="First"
+           data-pagination-pre-text="Previous"
+           data-pagination-next-text="Next"
+           data-pagination-last-text="Last">
+<!-- <table class="table table-bordered" id="table-test"> -->
 <caption style="text-align:center;font-weight: bold;font-size: larger">Test Result</caption>
   <thead>
-    <tr>
-    	<th data-field="ID">ID</th>
-        <th data-field="NAME">NAME</th>
+    <tr class="info">
+    	<th data-field="ID" >ID</th>
+        <th data-field="NAME" >NAME</th>
         <th data-field="Caption">Caption</th>
         <th data-field="Result">Result</th>
         <th data-field="is_nagetive">is_nagetive</th>
@@ -43,6 +62,7 @@
     </thead>
 </table>
 </div>
+
 <script>
 
 
@@ -55,11 +75,11 @@ $(document).ready(function(){
 });
 
 function reload(){
-	$("#table-testcase").bootstrapTable('refresh');
+	$("#table-testcase").bootstrapTable('refresh',{silent: true});
 	$('#table-testresult').bootstrapTable('refresh');
 }
 $.ajax({
-		url:'../testcase/queryResult',
+		url:'../testcase/queryAll',
 		type:'get',
 		contentType: "application/json",
 		dataType:'json',
@@ -69,6 +89,7 @@ $.ajax({
 			$('#table-test').bootstrapTable({data:data});
 		}
 });
+
 </script>
 
 
