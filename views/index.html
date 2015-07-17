@@ -1,6 +1,253 @@
 <% include header.html %>
-
+<style>
+.color-sucs{
+color:green;
+}
+.color-fail{
+color:red;
+}
+</style>
 <h3>Welcome to case management page</h3>
 <a class="btn btn-primary" href="../testcase" role="button">Check Case</a>
+
+
+<h1><%= title %></h1>
+<div class="table-responsive t1" >
+<table class="table table-striped" id="table-status" 
+	   data-show-refresh="true"
+	   data-show-toggle="true"  
+	   data-search="true"   
+	   data-row-style="rowStyle" 
+	   data-detail-view="true"
+	   data-toggle="dropdown"
+	   data-detail-formatter="detailFormatter" 
+	   >
+  <thead>
+    <tr class="info">
+    	<th data-field="state" data-checkbox="true"></th>
+    	<th data-field="Version">Version</th>
+        <th data-field="Status"  data-formatter="statusFormatter">Status</th>
+        <th data-field="operate"  data-align="center" data-formatter="operateFormatter" data-events="operateEvents">Operation</th>
+    </thead>
+</table>
+</div>
+
+<div>
+<input id="AFMTSTWIN2012" value="AFMTSTWIN2012"/>
+<input value="Uninstall and Refresh RTC" type="button" onclick="refreshRTC('AFMTSTWIN2012');"/>
+<input value="Kick Off Overnight Tests" type="button" onclick=""/>	
+</div>	
+<div>
+<input id="AFMTSTWIN2012R2" value="AFMTSTWIN2012R2"/>
+<input value="Uninstall and Refresh RTC" type="button" onclick="refreshRTC('AFMTSTWIN2012R2');"/>
+<input value="Kick Off Overnight Tests" type="button" onclick=""/>	
+</div>	
+<div>
+<input id="AFMTSTWIN2008R2" value="AFMTSTWIN2008R2"/>
+<input value="Uninstall and Refresh RTC" type="button" onclick="refreshRTC('AFMTSTWIN2008R2');"/>
+<input value="Kick Off Overnight Tests" type="button" onclick=""/>	
+</div>	
+<div>
+<input id="AFMTST64WIN8" value="AFMTST64WIN8"/>
+<input value="Uninstall and Refresh RTC" type="button" onclick="refreshRTC('AFMTST64WIN8');"/>
+<input value="Kick Off Overnight Tests" type="button" onclick=""/>	
+</div>	
+
+<div>
+	<span id="rtc"></span>
+</div>
+<script>
+
+	
+var dataSet = [
+               {"Version":'AFMTST64WIN8',"Status":'Running'},
+               {"Version":'AFMTST64WIN8',"Status":'Broken'},
+               {"Version":'AFMTST64WIN8',"Status":'Stopped'},
+               {"Version":'AFMTST64WIN8',"Status":'Stopped'},
+               {"Version":'AFMTST64WIN8',"Status":'Running'}
+               ];
+$(document).ready(function(){
+	$('#table-status').bootstrapTable({
+		"data":dataSet
+		});
+});
+
+function rowStyle(row,Status){
+
+     if (row.Status  === "Running" ) {
+    	// row.style +=' color:red';
+         return {
+             classes: 'success'
+         };
+     }
+     if (row.Status  === "Stopped" ) {
+         return {
+             classes: 'danger color-fail'
+         };
+     }
+     return {};    
+}
+function statusFormatter(value,row){
+	 if (row.Status  === "Running" ) {
+	    	// row.style +=' color:red';
+	         return '<span class="success">'+ value + '</span>'
+	     }
+	     if (row.Status  === "Stopped" ) {
+	         return  '<span class="danger">'+ value + '</span>'	         
+	     }
+	     return value;    
+}
+
+function detailFormatter(index, row) {
+	//this.trigger('expand-row', index, row, $tr.next().find('td'));
+    var html = [];
+    $.each(row, function (key, value) {
+        html.push('<p><b>' + key + ':</b> ' + value + '</p>');
+    });
+    return html.join('');
+}
+
+function operateFormatter(value, row, index) {
+    return [
+	'<a  class="btn btn-primary" href="javascript:void(0)" title="Uninstall and Refresh RTC">Uninstall RTC',
+	'</a>',
+	'<a style="margin-left:50px;" class="remove btn btn-primary" href="javascript:void(0)" title="Kick Off Overnight Tests">Kick Off Overnight Tests',
+	'<i class="glyphicon glyphicon-remove"></i>',
+	'</a>'
+      /*  '<a  class="btn btn-primary" href="javascript:void(0)" title="Uninstall and Refresh RTC">Uninstall RTC',
+            '<i class="glyphicon glyphicon-refresh"></i>',
+        '</a>',
+
+        '<a style="margin-left:50px;" class="remove ml10" href="javascript:void(0)" title="Kick Off Overnight Tests">',
+            '<i class="glyphicon glyphicon-remove"></i>',
+        '</a>'
+        */
+    ].join('');
+}
+
+window.operateEvents = {
+
+    'click .refresh': function (e, value, row, index) {
+        alert('You click edit icon, row: ' + JSON.stringify(row));
+        console.log(value, row, index);
+    },
+    'click .remove': function (e, value, row, index) {
+        alert('You click remove icon, row: ' + JSON.stringify(row));
+        console.log(value, row, index);
+    }
+};
+
+/*
+function refreshRTC(hostname)
+{
+	var host = hostname;
+	$.ajax({
+		url:'../testcase/refreshRTC',
+		data:{host:host},
+		type:'get',
+		success:function(data){
+			console.log('output is---------'+data);
+			$('#rtc').html(data);
+		}
+	});
+}
+$.ajax({
+	url:'../testcase/queryRunStatus',
+	type:'get',
+	success:function(data){
+		console.log("get");
+		}
+});
+*/
+/*
+$('#table-testresult').bootstrapTable({
+    url: '../testcase/queryResult',
+});
+
+$(document).ready(function(){
+	setInterval("reload()",5000);
+});
+
+function reload(){
+	$("#table-testcase").bootstrapTable('refresh',{silent: true});
+	$('#table-testresult').bootstrapTable('refresh');
+}
+$.ajax({
+		url:'../testcase/queryAll',
+		type:'get',
+		contentType: "application/json",
+		dataType:'json',
+		success:function(data){
+			//console.log(data);
+			console.dir(data);
+			$('#table-test').bootstrapTable({data:data});
+		}
+});
+*/
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+/*
+$(document).ready(function(){
+	var id = 0;
+	$.ajax({
+		url:'./queryAll',
+		type:'get',
+		contentType: "application/json",
+		dataType:'json',
+		success:function(data){
+			//console.log(data);
+			console.dir(data);
+			var $table = $('#table_testcase');
+			$table.dataTable(data);
+		},
+		error:function(data){
+			alert('failure!');
+			console.log(data.message);
+		}
+	});
+});
+*/
+
+
+</script>
+
+<script>
+/*$(document).ready(function(){
+var id = 0;
+$.ajax({
+	url:'../testcase/queryAll',
+	type:'get',
+	contentType: "application/json",
+	dataType:'json',
+	success:function(data){
+		console.log(data);
+		var str='';
+		$.each(data,function(i,val){
+			str+='<ul><li>'+val.NAME+'</li></ul>';
+		});
+					
+		$("#data").html(str);						
+
+	},
+	error:function(data){
+		alert('failure!');
+		console.log(data.message);
+	}
+});
+});
+*/
+</script>
 
 <% include footer.html %>
