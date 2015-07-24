@@ -1,0 +1,155 @@
+<% include header.html %>
+
+
+
+<h1><%= title %></h1>
+<div style = "margin:40px 40px;">
+    <label>Release: </label>
+    <select id="release1"  aria-haspopup="true" class=" btn btn-info" onChange="selectBuild()">  
+            <option value='0' selected="1">Release</option>  
+
+     </select>  
+     <label>Build: </label>
+     <select id="build1" class="btn btn-info" onChange="setresult()">Build
+        <option value="-1" selected="1">Build</option>  
+     </select> 
+</div>
+
+<div class="t1">
+<table     class='table'  
+           id="tableresult"              
+           data-pagination="true"
+           data-page-size="5"
+           data-page-list="[5,8,10]"
+           data-pagination-first-text="First"
+           data-pagination-pre-text="Previous"
+           data-pagination-next-text="Next"
+           data-pagination-last-text="Last"
+           >
+  <thead>
+    <tr class="info">
+    	<th data-field="runID" >ID</th>
+        <th data-field="runScope" >runScope</th>
+        <th data-field="testPC">testPC</th>
+        <th data-field="testBuild">testBuild</th>
+        <th data-field="Locale">Locale</th>
+        <th data-field="testRelease">testRelease</th>
+        <th data-field="testBuildNumber">testBuildNumber</th>
+        <th data-field="testBuildDate">testBuilddate</th>
+    </tr>
+    </thead>
+</table>
+</div>
+
+
+<!-- <table id="testrun" data-toggle="table" data-url="../select/queryAll">
+<thead>
+<tr>
+<th data-field="runID"> ID  </th>
+<th data-field="testPC"> testPC  </th>
+<th data-field="testBuild"> testBuild  </th>
+<th data-field="testRelease"> testRelease  </th>
+<th data-field="testBuild"> testBuild </th>
+<th data-field="testBuildDate"> testBuildDate  </th>
+</tr>
+</thead>
+</table>
+ -->
+
+<script>
+
+function reload(){
+	$.ajax({
+	url:'../select/queryAll',
+	type:'get',
+	contentType: "application/json",
+	dataType:'json',
+	success:function(data){
+		console.dir(data);
+		$('#tableresult').bootstrapTable('destroy');
+		$('#tableresult').bootstrapTable({data:data});
+	}
+});
+}
+
+$(document).ready(function(){
+	$('#tableresult').bootstrapTable({
+	    url: '../select/queryAll',
+	});
+
+	$.ajax({
+		url:'../select/release',
+		type:'get',
+		contentType: "application/json",
+	//	dataType:'jsonp',
+		success:function(data){
+			//console.log(data);
+			console.dir(data);
+			$.each(data,function(i,val){
+				var opt = new Option(val.testRelease,i+1);   
+				$("#release1").append(opt);  
+			});										
+		},
+		error:function(data){
+			alert('failure!');
+			console.log(e.message);
+		}
+	});
+});
+
+function selectBuild() {  
+    var release = $('#release1 option:selected').text();
+    var build = $("#build1");   
+        build.empty();          
+        $.ajax({
+    		url:'../select/build?releaseNumber='+ release,
+    		type:'get',
+    		contentType: "application/json",
+    		success:function(data){
+    			console.log(data);
+    			$.each(data,function(i,val){   
+    		           var opt = new Option(val.testBuildNumber,i+1);   
+    		           build.append(opt);  
+    		       });		
+    			setresult();
+    		},
+    		error:function(data){
+    			alert('failure!');
+    			console.log(e.message);
+    		}
+    	});
+        
+        if(release=="Release"){
+        	//build.html("Build");    //Why not work!!!!!
+        	$("<option value='-1'>Build</option>").appendTo("#build1");        
+        }
+   }  
+   
+ function setresult() {
+	 var build = $( "#build1 option:selected" ).text();
+	 if(build!="Build"){
+	 $.ajax({
+		 url:'../select/result?testBuildNumber='+build,
+		 type:'get',
+ 		contentType: "application/json",
+ 		success:function(data){
+ 			console.log('table');
+ 			console.log(data);
+ 			$('#tableresult').bootstrapTable('destroy');
+ 			$('#tableresult').bootstrapTable({data:data});				
+ 			$("#tableresult").bootstrapTable('refresh',{silent: true});
+ 		},
+ 		error:function(data){
+ 			alert('failure!');
+ 			console.log(e.message);
+ 		}
+	 });
+	 }
+	 else{
+		 reload();
+	 }
+ }
+</script>
+
+
+<% include footer.html %>

@@ -7,7 +7,8 @@ module.exports = {
 			user:'root',
 			password:'jungleli',
 			database:'test',
-			port:3307
+			port:3307,
+			bigNumberStrings:true
 		}
 };
 
