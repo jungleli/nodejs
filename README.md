@@ -30,11 +30,11 @@ Nodeclipse is free open-source project that grows with your contributions.
 
 ###Note:
 1.Configure to restart service automatic.Then you no need to restart the service every time some changed have been made.
->>npm install -g nodemon
->>nodemon -v
+npm install -g nodemon
+nodemon -v
 2.Modify package.json：
 "start": "nodemon ./bin/www"
->>npm start
+npm start
 
 
 
